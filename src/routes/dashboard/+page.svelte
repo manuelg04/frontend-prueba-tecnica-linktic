@@ -2,9 +2,9 @@
 <script lang="ts">
     import { authStore } from '../../stores/auth';
     import { onMount } from 'svelte';
-    import axios from 'axios';
-    import type { Product } from '$lib/images/interfaces/product.interface';
-
+    import { fetchProducts, createProduct, updateProduct, deleteProduct } from '$lib/services/productService';
+	import type { Product } from '$lib/interfaces/product.interface';
+  
     let products: Product[] = [];
     let selectedProduct: Product | null = null;
     let name = '';
@@ -12,86 +12,31 @@
     let price = 0;
   
     onMount(async () => {
-      await fetchProducts();
+      products = await fetchProducts($authStore.token);
     });
   
-    async function fetchProducts() {
-      try {
-        //TODO: pasar las url a vartiables de entorno
-        const response = await axios.get('http://localhost:3000/products', {
-          headers: {
-            Authorization: `Bearer ${$authStore.token}`,
-          },
-        });
-        products = response.data;
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
+    async function handleCreateProduct() {
+      const newProduct = await createProduct({ name, description, price }, $authStore.token);
+      products = [...products, newProduct];
+      resetForm();
     }
   
-    async function createProduct() {
-      try {
-        const response = await axios.post(
-          'http://localhost:3000/products',
-          {
-            name,
-            description,
-            price,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${$authStore.token}`,
-            },
-          }
-        );
-        //TODO: Handle response
-        products = [...products, response.data];
-        resetForm();
-      } catch (error) {
-        console.error('Error creating product:', error);
-      }
-    }
-  
-    async function updateProduct() {
-      try {
-        const response = await axios.put(
-          `http://localhost:3000/products/${selectedProduct?.id}`,
-          {
-            name,
-            description,
-            price,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${$authStore.token}`,
-            },
-          }
-        );
-        //TODO: Handle response
-        const updatedProductIndex = products.findIndex(
-          (p) => p.id === selectedProduct?.id
-        );
-        products[updatedProductIndex] = response.data;
+    async function handleUpdateProduct() {
+      if (selectedProduct) {
+        const updatedProduct = await updateProduct(selectedProduct.id, { name, description, price }, $authStore.token);
+        const updatedProductIndex = products.findIndex((p) => p.id === selectedProduct?.id);
+        products[updatedProductIndex] = updatedProduct;
         products = products;
         resetForm();
-      } catch (error) {
-        console.error('Error updating product:', error);
       }
     }
   
-    async function deleteProduct(productId: number) {
-      try {
-        const response = await axios.delete(`http://localhost:3000/products/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${$authStore.token}`,
-          },
-        });
-        //TODO: Handle response
-        products = products.filter((p) => p.id !== productId);
-      } catch (error) {
-        console.error('Error deleting product:', error);
-      }
+    async function handleDeleteProduct(productId: number) {
+    if ($authStore.token) {
+      await deleteProduct(productId, $authStore.token);
+      products = products.filter((p) => p.id !== productId);
     }
+  }
   
     function selectProduct(product: Product) {
       selectedProduct = product;
@@ -108,7 +53,7 @@
     }
   </script>
   
-  {#if $authStore.isAuthenticated}
+  {#if $authStore.isAuthenticated && $authStore.token}
     <div class="container mx-auto px-4">
       <h1 class="text-2xl font-bold mb-4">Product Dashboard</h1>
   
@@ -117,7 +62,13 @@
           <h2 class="text-xl font-bold mb-4">
             {selectedProduct ? 'Edit Product' : 'Create Product'}
           </h2>
-          <form on:submit|preventDefault={selectedProduct ? updateProduct : createProduct}>
+          <form on:submit|preventDefault={() => {
+            if (selectedProduct) {
+              handleUpdateProduct();
+            } else {
+              handleCreateProduct();
+            }
+          }}>
             <div class="mb-4">
               <label for="name" class="block mb-2">Name</label>
               <input
@@ -185,10 +136,9 @@
                     >
                       Edit
                     </button>
-                    <button
-                      class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                      on:click={() => deleteProduct(product.id)}
-                    >
+                    <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                    on:click={() => handleDeleteProduct(product.id)}
+                  >
                       Delete
                     </button>
                   </div>
