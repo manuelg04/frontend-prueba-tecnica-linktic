@@ -1,9 +1,8 @@
 // src/lib/services/productService.ts
 import axios from 'axios';
 import type { Product } from '$lib/interfaces/product.interface';
-//TODO: Add the API_URL constant  ENV FI,EE
-const API_URL = 'http://localhost:3000/products';
 
+const API_URL = import.meta.env.PUBLIC_API_URL;
 export async function fetchProducts(token: string | null): Promise<Product[]> {
   const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
   const response = await axios.get(API_URL, config);
