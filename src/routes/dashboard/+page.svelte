@@ -17,6 +17,7 @@
   
     async function fetchProducts() {
       try {
+        //TODO: pasar las url a vartiables de entorno
         const response = await axios.get('http://localhost:3000/products', {
           headers: {
             Authorization: `Bearer ${$authStore.token}`,
