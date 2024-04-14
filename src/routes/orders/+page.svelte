@@ -4,7 +4,7 @@
     import axios from 'axios';
     import "../../app.css"
 	import Navbar from '../../components/Navbar.svelte';
-  
+    import OrderModal from '../../components/Order.svelte';
     let orders: any[] = [];
   
     onMount(async () => {
@@ -13,7 +13,8 @@
   
     async function fetchOrders() {
       try {
-        const userId = $authStore.user?.id;
+        const userId = $authStore.userId;
+        console.log(typeof userId)
         const token = $authStore.token;
   
         if (userId && token) {
@@ -22,7 +23,7 @@
               Authorization: `Bearer ${token}`,
             },
           });
-  
+          console.log("🚀 ~ response:", response)
           orders = response.data;
         }
       } catch (error) {
@@ -48,13 +49,44 @@
       }
     }
   
-    function updateOrder(orderId: number) {
-      console.log('Updating order:', orderId);
+    async function updateOrder(orderId: number) {
+      console.log("🚀 ~ orderId:", orderId)
+      try {
+        const token = $authStore.token;
+        if (token) {
+          await axios.put(`http://localhost:3000/orders/${orderId}`, {
+          
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          await fetchOrders();
+        }
+      } catch (error) {
+        console.log('Error updating order:', error);
+      }
     }
+
+    let isModalOpen = false;
+  let selectedOrder: any = null;
+
+  function openModal(order: any) {
+    console.log(order)
+    selectedOrder = order;
+    isModalOpen = true;
+  }
+
+  function closeModal() {
+    selectedOrder = null;
+    isModalOpen = false;
+  }
   </script>
   
   <main class="container mx-auto px-4 py-8">
     <Navbar />
+    <OrderModal isOpen={isModalOpen} order={selectedOrder} on:close={closeModal} />
     <h1 class="text-2xl font-bold mb-4">My Orders</h1>
   
     <table class="w-full table-auto">
@@ -74,7 +106,9 @@
             <td class="border px-4 py-2">{order.totalPrice}</td>
             <td class="border px-4 py-2">
               <button class="bg-red-500 text-white px-2 py-1 rounded mr-2" on:click={() => deleteOrder(order.id)}>Delete</button>
-              <button class="bg-blue-500 text-white px-2 py-1 rounded" on:click={() => updateOrder(order.id)}>Update</button>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" on:click={() => openModal(order)}>
+                Update
+              </button>
             </td>
           </tr>
         {/each}
