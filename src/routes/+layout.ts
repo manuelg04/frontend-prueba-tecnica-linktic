@@ -1,14 +1,11 @@
-// src/routes/+layout.js
-import { authStore } from '../stores/auth';
+// src/routes/+layout.ts
+import { goto } from '$app/navigation';
 import { get } from 'svelte/store';
-import { redirect } from '@sveltejs/kit';
+import { authStore } from '../stores/auth';
 
-export async function load({ url }) {
-  const { isAuthenticated } = get(authStore);
-  
-  if (!isAuthenticated && url.pathname === '/dashboard') {
-    throw redirect(302, '/');
+export function load() {
+  const $authStore = get(authStore);
+  if ($authStore.token && $authStore.isAuthenticated) {
+    goto('/dashboard');
   }
-  
-  return {};
 }

@@ -28,6 +28,8 @@
         error = 'Invalid credentials. Please try again.';
       }
     };
+
+    console.log("authstore desde el login", $authStore)
   </script>
   
   <div class="min-h-screen flex items-center justify-center bg-gray-100">

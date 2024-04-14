@@ -1,11 +1,13 @@
 <!-- src/routes/dashboard/+page.svelte -->
 <script lang="ts">
+	import { redirect } from '@sveltejs/kit';
     import { authStore } from '../../stores/auth';
     import { onMount } from 'svelte';
     import { fetchProducts, createProduct, updateProduct, deleteProduct } from '$lib/services/productService';
 	import type { Product } from '$lib/interfaces/product.interface';
 	import Cart from '../../components/Cart.svelte';
 	import Navbar from '../../components/Navbar.svelte';
+	import { goto } from '$app/navigation';
   
     let products: Product[] = [];
     let selectedProduct: Product | null = null;
@@ -16,8 +18,15 @@
     let showCart = false;
   
     onMount(async () => {
+      if (!$authStore.token || !$authStore.isAuthenticated) {
+      // Mostrar el mensaje de "Unauthorized" durante 2 segundos antes de redirigir
+      setTimeout(() => {
+        goto('/');
+      }, 2000);
+    }
       products = await fetchProducts($authStore.token);
     });
+    
   
     async function handleCreateProduct() {
       const newProduct = await createProduct({ name, description, price }, $authStore.token);
@@ -68,9 +77,10 @@
       description = '';
       price = 0;
     }
+    console.log("$authStore desde el dashboard", $authStore)
   </script>
   
-  {#if $authStore.isAuthenticated && $authStore.token}
+  {#if $authStore.token && $authStore.isAuthenticated}
     <div class="container mx-auto px-4">
       <Navbar />
       <h1 class="text-2xl font-bold mb-4">Product Dashboard</h1>
@@ -186,3 +196,14 @@
       </div>
     </div>
   {/if}
+  
+  {#if !$authStore.token || !$authStore.isAuthenticated}
+    <div class="min-h-screen flex items-center justify-center bg-gray-100">
+      <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6">Unauthorized</h2>
+        <p class="text-red-500 mb-4">You are not authorized to view this page. Please log in.</p>
+        
+      </div>
+    </div>
+  {/if}
+  
