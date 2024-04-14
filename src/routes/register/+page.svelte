@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import "../../app.css"
 	import { goto } from '$app/navigation';
+	import Swal from 'sweetalert2';
   
     let email = '';
     let password = '';
@@ -14,16 +15,31 @@
           email,
           password,
         });
-        if (response.status === 200) {
+        if (response.status === 201) {
+          Swal.fire({
+            title: 'Registro exitoso',
+            text: 'Usuario registrado con éxito',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          });
           goto('/dashboard')
         }
    
         console.log("🚀 ~ response:", response)
-        // Manejar la respuesta del backend (por ejemplo, mostrar un mensaje de éxito)
-        // Redirigir al usuario a la página de inicio de sesión después del registro exitoso
+       
       } catch (error) {
         console.error("🚀 ~ error:", error)
-        error = 'Error occurred during registration. Please try again.';
+        if(error.response.status === 409){
+          Swal.fire({
+            title: 'Error',
+            text: 'User already exists. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          });
+        }
+        else{
+          error = 'Invalid credentials. Please try again.'
+        }
       }
     };
   </script>

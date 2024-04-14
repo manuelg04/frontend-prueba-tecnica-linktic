@@ -4,6 +4,7 @@
 	import axios from 'axios';
 	import '../app.css';
   import { authStore } from '../stores/auth';
+	import Swal from 'sweetalert2';
 
 	export let cart: Product[];
 	let isOpen = true;
@@ -28,7 +29,13 @@
 
 			if (response.status === 201) {
 				const newOrder = response.data;
-				console.log('Orden creada exitosamente:', newOrder);
+        Swal.fire({
+          title: 'Orden creada',
+          text: `Orden creada con éxito con el ID: ${newOrder.id}`,
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        });
+				closeCart();
 	
 			} 
 		} catch (error) {
