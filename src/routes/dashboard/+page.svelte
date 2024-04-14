@@ -4,12 +4,16 @@
     import { onMount } from 'svelte';
     import { fetchProducts, createProduct, updateProduct, deleteProduct } from '$lib/services/productService';
 	import type { Product } from '$lib/interfaces/product.interface';
+	import Cart from '../../components/Cart.svelte';
+	import Navbar from '../../components/Navbar.svelte';
   
     let products: Product[] = [];
     let selectedProduct: Product | null = null;
+    let cart: Product[] = [];
     let name = '';
     let description = '';
     let price = 0;
+    let showCart = false;
   
     onMount(async () => {
       products = await fetchProducts($authStore.token);
@@ -37,6 +41,19 @@
       products = products.filter((p) => p.id !== productId);
     }
   }
+
+  function addToCart(product: Product) {
+    cart = [...cart, product];
+  console.log('Producto agregado al carrito:', product);
+  console.log('Carrito actualizado:', cart);
+  }
+  function removeFromCart(index: number) {
+    cart.splice(index, 1);
+    cart = cart;
+  }
+  function toggleCart() {
+    showCart = !showCart;
+  }
   
     function selectProduct(product: Product) {
       selectedProduct = product;
@@ -55,8 +72,21 @@
   
   {#if $authStore.isAuthenticated && $authStore.token}
     <div class="container mx-auto px-4">
+      <Navbar />
       <h1 class="text-2xl font-bold mb-4">Product Dashboard</h1>
-  
+      <div class="relative">
+        <div class="relative">
+          <button class="text-gray-600 hover:text-gray-800 focus:outline-none" on:click={toggleCart}>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cart.length}</span>
+          </button>
+        </div>
+        {#if showCart}
+        <Cart {cart} />
+        {/if}
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white p-4 rounded shadow">
           <h2 class="text-xl font-bold mb-4">
@@ -141,6 +171,12 @@
                   >
                       Delete
                     </button>
+                    <button
+                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                    on:click={() => addToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
                   </div>
                 </li>
               {/each}

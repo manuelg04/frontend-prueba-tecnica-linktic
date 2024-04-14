@@ -18,7 +18,7 @@
         console.log("🚀 ~ response:", response)
 		if (response.status === 200) {
 			const { token } = response.data;
-      		authStore.set({ token, isAuthenticated: true });
+      		authStore.set({ token, isAuthenticated: true, user: response.data.user});
 		  goto('/dashboard')
 		}
 		
