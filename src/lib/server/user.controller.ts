@@ -63,7 +63,7 @@ export const loginUser = async (event: RequestEvent): Promise<Response> => {
       path: '/',
     });
 
-    return json({ message: 'Login successful', email, userId: user.id });
+    return json({ message: 'Login successful', token, email, userId: user.id });
   } catch (err: any) {
     throw error(500, 'Error logging in');
   }
@@ -71,7 +71,6 @@ export const loginUser = async (event: RequestEvent): Promise<Response> => {
 
 export const logoutUser = async (event: RequestEvent): Promise<Response> => {
     const { userId } = await event.request.json();
-  console.log("🚀 ~ userId:", userId)
 
   try {
     await prisma.user.update({
