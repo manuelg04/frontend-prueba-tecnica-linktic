@@ -20,7 +20,6 @@
 	let description = '';
 	let price = 0;
 	let showCart = false;
-  
 
 	onMount(async () => {
 		if (!$authStore.token || !$authStore.isAuthenticated) {
@@ -29,11 +28,11 @@
 			}, 2000);
 		}
 		products = await fetchProducts($authStore.token);
-    const storedCart = localStorage.getItem('cart');
-    console.log("🚀 ~ storedCart:", storedCart)
-    if (storedCart) {
-      cart = JSON.parse(storedCart);
-    }
+		const storedCart = localStorage.getItem('cart');
+		console.log('🚀 ~ storedCart:', storedCart);
+		if (storedCart) {
+			cart = JSON.parse(storedCart);
+		}
 	});
 
 	async function handleCreateProduct() {
@@ -65,15 +64,16 @@
 
 	function addToCart(product: Product) {
 		cart = [...cart, product];
-    localStorage.setItem('cart', JSON.stringify(cart));
+		localStorage.setItem('cart', JSON.stringify(cart));
 		console.log('Producto agregado al carrito:', product);
 		console.log('Carrito actualizado:', cart);
 	}
 	// function removeFromCart(index: number) {
 	// 	cart.splice(index, 1);
 	// 	cart = cart;
-  //   localStorage.setItem('cart', JSON.stringify(cart));
+	//   localStorage.setItem('cart', JSON.stringify(cart));
 	// }
+
 	function toggleCart() {
 		showCart = !showCart;
 	}
@@ -91,7 +91,9 @@
 		description = '';
 		price = 0;
 	}
-	console.log('$authStore desde el dashboard', $authStore);
+  function handleRemoveProduct() {
+		cart = cart;
+	}
 </script>
 
 {#if $authStore.token && $authStore.isAuthenticated}
@@ -100,15 +102,29 @@
 		<h1 class="text-2xl font-bold mb-4">Product Dashboard</h1>
 		<div class="relative">
 			<div class="relative">
-				<button class="text-gray-600 hover:text-gray-800 focus:outline-none flex items-center" on:click={toggleCart}>
-          <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          </svg>
-          <span class="text-sm font-bold">{cart.length}</span>
-        </button>
+				<button
+					class="text-gray-600 hover:text-gray-800 focus:outline-none flex items-center"
+					on:click={toggleCart}
+				>
+					<svg
+						class="w-6 h-6 mr-1"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+						></path>
+					</svg>
+					<span class="text-sm font-bold">{cart.length}</span>
+				</button>
 			</div>
 			{#if showCart}
-				<Cart {cart}/>
+				<Cart {cart} on:removeProduct={handleRemoveProduct} />
 			{/if}
 		</div>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">

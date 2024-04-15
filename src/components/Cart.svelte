@@ -5,7 +5,7 @@
 	import '../app.css';
 	import { authStore } from '../stores/auth';
 	import Swal from 'sweetalert2';
-
+  import { createEventDispatcher } from 'svelte';
 
 	export let cart: Product[];
   $: {
@@ -16,10 +16,12 @@
     }
   }
 	let isOpen = true;
+  const dispatch = createEventDispatcher();
 	function removeFromCart(index: number) {
 		cart.splice(index, 1);
 		cart = cart;
     localStorage.setItem('cart', JSON.stringify(cart));
+    dispatch('removeProduct');
 	}
 
 	async function createOrder(token: string | null) {
