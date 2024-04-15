@@ -3,13 +3,12 @@
     import "../../app.css"
 	import { goto } from '$app/navigation';
 	import Swal from 'sweetalert2';
-  import { PUBLIC_API_URL_USERS } from '$env/static/public';
+ 
   
     let email = '';
     let password = '';
     let error = '';
-    console.log(`${PUBLIC_API_URL_USERS}/register`)
-  
+
     const handleRegister = async () => {
       try {
         const response = await axios.post('/api/users/register', {

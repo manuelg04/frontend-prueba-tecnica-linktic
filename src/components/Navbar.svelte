@@ -4,8 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { authStore } from '../stores/auth';
 	import axios from 'axios';
-	import { PUBLIC_API_URL_USERS } from '$env/static/public';	
-
+		
 	async function handleLogout() {
 		try {
 			const userId = $authStore.userId;

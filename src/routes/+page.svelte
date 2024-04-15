@@ -4,8 +4,7 @@
 	import "../app.css"
 	import { goto } from '$app/navigation';
 	import { authStore } from '../stores/auth';
-  import { PUBLIC_API_URL_USERS } from '$env/static/public';
-  
+ 
     let email = '';
     let password = '';
     let error = '';
