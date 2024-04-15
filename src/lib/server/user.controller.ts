@@ -28,6 +28,7 @@ export const registerUser = async (event: RequestEvent): Promise<Response> => {
 
     return json({ message: 'User registered successfully', user: newUser }, { status: 201 });
   } catch (err: any) {
+    console.error(err.message);
     throw error(500, 'Error registering user');
   }
 };
