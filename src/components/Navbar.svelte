@@ -9,7 +9,7 @@
 	async function handleLogout() {
 		try {
 			const userId = $authStore.userId;
-			await axios.post(`${PUBLIC_API_URL_USERS}/logout`, { userId });
+			await axios.post('api/users/logout', { userId });
 			authStore.set({
 				token: null,
 				isAuthenticated: false,

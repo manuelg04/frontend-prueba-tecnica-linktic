@@ -12,7 +12,7 @@
     
     const handleLogin = async () => {
       try {
-        const response = await axios.post(`${PUBLIC_API_URL_USERS}/login`, {
+        const response = await axios.post('api/users/login', {
           email,
           password,
         });

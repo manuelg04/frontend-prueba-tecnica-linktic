@@ -29,7 +29,7 @@
 		try {
 			const userId = $authStore.userId;
 			const response = await axios.post(
-				`${PUBLIC_API_URL_ORDERS}`,
+				'api/orders',
 				{
 					cartProducts: cart,
 					userId: userId

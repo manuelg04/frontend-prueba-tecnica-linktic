@@ -39,7 +39,7 @@
     try {
       const token = $authStore.token;
       if (token) {
-        await axios.put(`${PUBLIC_API_URL_ORDERS}/${order.id}`, {
+        await axios.put(`api/orders/${order.id}`, {
           products: order.products.map((product: Product) => product.id),
           totalPrice: order.totalPrice,
         }, {

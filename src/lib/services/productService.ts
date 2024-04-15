@@ -4,7 +4,7 @@ import type { Product } from '$lib/interfaces/product.interface';
 import { PUBLIC_API_URL_PRODUCTS } from '$env/static/public';
 import Swal from 'sweetalert2';
 
-const API_URL = PUBLIC_API_URL_PRODUCTS;
+const API_URL = '/api/products';
 export async function fetchProducts(token: string | null): Promise<Product[]> {
   const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
   const response = await axios.get(API_URL, config);

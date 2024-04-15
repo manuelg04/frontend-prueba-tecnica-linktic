@@ -19,8 +19,7 @@
         const token = $authStore.token;
   
         if (userId && token) {
-          console.log(`${PUBLIC_API_URL_ORDERS}/${userId}`)
-          const response = await axios.get(`${PUBLIC_API_URL_ORDERS}/${userId}`, {
+          const response = await axios.get(`api/orders/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -46,7 +45,7 @@
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (token) {
-              const response = await axios.delete(`${PUBLIC_API_URL_ORDERS}/${orderId}`, {
+              const response = await axios.delete(`api/orders/${orderId}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },

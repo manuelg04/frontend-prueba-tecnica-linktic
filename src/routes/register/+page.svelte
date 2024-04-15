@@ -12,7 +12,7 @@
   
     const handleRegister = async () => {
       try {
-        const response = await axios.post(`${PUBLIC_API_URL_USERS}/register`, {
+        const response = await axios.post('/api/users/register', {
           email,
           password,
         });
