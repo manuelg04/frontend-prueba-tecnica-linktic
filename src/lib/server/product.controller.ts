@@ -81,7 +81,7 @@ export const updateProduct = async (event: RequestEvent): Promise<Response> => {
     throw error(500, 'Error updating product');
   }
 };
-
+//metodo borrar prudcto
 export const deleteProduct = async (event: RequestEvent): Promise<Response> => {
   const { id } = event.params;
   const userId = event.locals.userId;
