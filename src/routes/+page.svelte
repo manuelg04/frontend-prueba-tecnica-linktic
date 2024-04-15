@@ -16,7 +16,6 @@
           email,
           password,
         });
-        console.log("🚀 ~ response:", response)
 		if (response.status === 200) {
 			const { token, email } = response.data;
       		authStore.set({ token, isAuthenticated: true, userId: response.data.userId, email});

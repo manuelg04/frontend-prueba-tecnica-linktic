@@ -33,7 +33,6 @@
 			cart = JSON.parse(storedCart);
 		}
 	});
-	console.log($authStore.userId);
 	async function handleCreateProduct() {
 		const newProduct = await createProduct({ name, description, price }, $authStore.token);
 		products = [...products, newProduct];

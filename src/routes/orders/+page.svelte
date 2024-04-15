@@ -27,7 +27,6 @@
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log("🚀 ~ response:", response)
           orders = response.data;
         }
       } catch (error) {
