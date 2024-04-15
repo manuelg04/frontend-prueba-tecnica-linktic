@@ -31,10 +31,8 @@ export const registerUser = async (event: RequestEvent): Promise<Response> => {
     console.error(err.message);
 
       if (err instanceof Error) {
-        // Error genérico
         throw error(500, err.message);
       } else {
-        // Error desconocido
         throw error(500, 'Unknown error');
       }
 
