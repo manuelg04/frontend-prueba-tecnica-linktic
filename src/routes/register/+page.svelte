@@ -8,6 +8,7 @@
     let email = '';
     let password = '';
     let error = '';
+    console.log(`${PUBLIC_API_URL_USERS}/register`)
   
     const handleRegister = async () => {
       try {
