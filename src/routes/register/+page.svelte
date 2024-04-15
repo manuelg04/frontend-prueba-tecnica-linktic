@@ -1,6 +1,5 @@
 <script lang="ts">
     import axios from 'axios';
-    import { onMount } from 'svelte';
     import "../../app.css"
 	import { goto } from '$app/navigation';
 	import Swal from 'sweetalert2';

@@ -16,8 +16,6 @@
     async function fetchOrders() {
       try {
         const userId = $authStore.userId;
-        console.log("🚀 ~ userId:", userId)
-        console.log(typeof userId)
         const token = $authStore.token;
   
         if (userId && token) {
