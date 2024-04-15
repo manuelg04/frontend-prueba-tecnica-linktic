@@ -45,7 +45,7 @@
 			<div class="hidden sm:ml-6 sm:flex sm:items-center">
 				<button
 					type="button"
-					class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+					class="bg-white p-1 rounded-full text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 					on:click={handleLogout}
 				>
 					<span class="sr-only">Logout</span>

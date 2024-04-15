@@ -118,10 +118,10 @@
       <tbody>
         {#each orders as order}
           <tr class="bg-white hover:bg-gray-100">
-            <td class="border px-4 py-2">{order.id}</td>
-            <td class="border px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>
-            <td class="border px-4 py-2">{order.totalPrice}</td>
-            <td class="border px-4 py-2">
+            <td class="border px-4 py-2 text-center">{order.id}</td>
+            <td class="border px-4 py-2 text-center">{new Date(order.createdAt).toLocaleDateString()}</td>
+            <td class="border px-4 py-2 text-center">{order.totalPrice}</td>
+            <td class="border px-4 py-2 text-center">
               <button class="bg-red-500 text-white px-2 py-1 rounded mr-2" on:click={() => deleteOrder(order.id)}>Delete</button>
               <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" on:click={() => openModal(order)}>
                 Update

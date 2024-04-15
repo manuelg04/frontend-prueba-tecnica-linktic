@@ -100,6 +100,7 @@
 	<div class="container mx-auto px-4">
 		<Navbar />
 		<h1 class="text-2xl font-bold mb-4">Product Dashboard</h1>
+    <h2 class="text-2xl font-bold mb-4">Welcome, {$authStore.email}</h2>
 		<div class="relative">
 			<div class="relative">
 				<button
