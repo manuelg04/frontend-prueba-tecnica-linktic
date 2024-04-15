@@ -9,7 +9,6 @@
 	async function handleLogout() {
 		try {
 			const userId = $authStore.userId;
-			console.log("🚀 ~ userId:", userId)
 			await axios.post(`${PUBLIC_API_URL_USERS}/logout`, { userId });
 			authStore.set({
 				token: null,
