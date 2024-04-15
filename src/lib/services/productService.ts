@@ -1,10 +1,10 @@
 // src/lib/services/productService.ts
 import axios from 'axios';
 import type { Product } from '$lib/interfaces/product.interface';
-import { PUBLIC_API_URL } from '$env/static/public';
+import { PUBLIC_API_URL_PRODUCTS } from '$env/static/public';
 import Swal from 'sweetalert2';
 
-const API_URL = PUBLIC_API_URL;
+const API_URL = PUBLIC_API_URL_PRODUCTS;
 export async function fetchProducts(token: string | null): Promise<Product[]> {
   const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
   const response = await axios.get(API_URL, config);

@@ -4,14 +4,15 @@
 	import "../app.css"
 	import { goto } from '$app/navigation';
 	import { authStore } from '../stores/auth';
+  import { PUBLIC_API_URL_USERS } from '$env/static/public';
   
     let email = '';
     let password = '';
     let error = '';
-  
+    
     const handleLogin = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/auth/login', {
+        const response = await axios.post(`${PUBLIC_API_URL_USERS}/login`, {
           email,
           password,
         });

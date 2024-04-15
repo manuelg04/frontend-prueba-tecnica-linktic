@@ -4,6 +4,7 @@
     import "../../app.css"
 	import { goto } from '$app/navigation';
 	import Swal from 'sweetalert2';
+  import { PUBLIC_API_URL_USERS } from '$env/static/public';
   
     let email = '';
     let password = '';
@@ -11,7 +12,7 @@
   
     const handleRegister = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/auth/register', {
+        const response = await axios.post(`${PUBLIC_API_URL_USERS}/register`, {
           email,
           password,
         });

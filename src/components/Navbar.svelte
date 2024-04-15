@@ -4,11 +4,14 @@
 	import { goto } from '$app/navigation';
 	import { authStore } from '../stores/auth';
 	import axios from 'axios';
+	import { PUBLIC_API_URL_USERS } from '$env/static/public';	
+
+	console.log(PUBLIC_API_URL_USERS);
 
 	async function handleLogout() {
 		try {
 			const userId = $authStore.userId;
-			await axios.post('http://localhost:3000/auth/logout', { userId });
+			await axios.post(`${PUBLIC_API_URL_USERS}/logout`, { userId });
 
 			authStore.set({
 				token: null,
