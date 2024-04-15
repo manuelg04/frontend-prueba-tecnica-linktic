@@ -17,13 +17,11 @@
         });
         console.log("🚀 ~ response:", response)
 		if (response.status === 200) {
-			const { token } = response.data;
-      		authStore.set({ token, isAuthenticated: true, userId: response.data.userId});
+			const { token, email } = response.data;
+      		authStore.set({ token, isAuthenticated: true, userId: response.data.userId, email});
 		  goto('/dashboard')
 		}
-		
-        // Manejar la respuesta del backend (por ejemplo, guardar el token en localStorage)
-        // Redirigir a la página principal después del inicio de sesión exitoso
+	
       } catch (err) {
         error = 'Invalid credentials. Please try again.';
       }
