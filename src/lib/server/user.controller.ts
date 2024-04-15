@@ -70,7 +70,8 @@ export const loginUser = async (event: RequestEvent): Promise<Response> => {
 };
 
 export const logoutUser = async (event: RequestEvent): Promise<Response> => {
-  const userId = event.locals.userId;
+    const { userId } = await event.request.json();
+  console.log("🚀 ~ userId:", userId)
 
   try {
     await prisma.user.update({
@@ -81,6 +82,8 @@ export const logoutUser = async (event: RequestEvent): Promise<Response> => {
     event.cookies.delete('token', { path: '/' });
     return json({ message: 'Logout successful' });
   } catch (err: any) {
+
+    console.error(err.message);
     throw error(500, 'Error logging out');
   }
 };
