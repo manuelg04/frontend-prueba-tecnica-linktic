@@ -28,6 +28,7 @@ export const createOrder = async (event: RequestEvent): Promise<Response> => {
 };
 
 export const getOrders = async (): Promise<Response> => {
+    console.log('entrando en getOrders')
   try {
     const orders = await prisma.order.findMany({
       include: { products: true },
@@ -40,6 +41,7 @@ export const getOrders = async (): Promise<Response> => {
 
 export const getOrdersByUserId = async (event: RequestEvent): Promise<Response> => {
   const { userId } = event.params;
+  console.log("🚀 ~ userId:", userId)
 
   try {
     const orders = await prisma.order.findMany({
@@ -89,13 +91,13 @@ export const updateOrder = async (event: RequestEvent): Promise<Response> => {
 };
 
 export const deleteOrder = async (event: RequestEvent): Promise<Response> => {
-  const { orderId } = event.params;
+  const { id } = event.params;
 
   try {
     await prisma.order.delete({
-      where: { id: Number(orderId) },
+      where: { id: Number(id) },
     });
-    return json(null, { status: 204 });
+    return new Response(null, { status: 204 });
   } catch (err: any) {
     throw error(500, 'Error deleting order');
   }

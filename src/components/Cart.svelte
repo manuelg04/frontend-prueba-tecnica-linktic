@@ -6,6 +6,7 @@
 	import { authStore } from '../stores/auth';
 	import Swal from 'sweetalert2';
   import { createEventDispatcher } from 'svelte';
+	import { PUBLIC_API_URL_ORDERS } from '$env/static/public';
 
 	export let cart: Product[];
   $: {
@@ -28,7 +29,7 @@
 		try {
 			const userId = cart[0].userId;
 			const response = await axios.post(
-				'http://localhost:3000/orders',
+				`${PUBLIC_API_URL_ORDERS}`,
 				{
 					cartProducts: cart,
 					userId: userId

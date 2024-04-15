@@ -6,6 +6,7 @@
 	import Navbar from '../../components/Navbar.svelte';
     import OrderModal from '../../components/Order.svelte';
 	import Swal from 'sweetalert2';
+	import { PUBLIC_API_URL_ORDERS } from '$env/static/public';
     let orders: any[] = [];
   
     onMount(async () => {
@@ -15,15 +16,17 @@
     async function fetchOrders() {
       try {
         const userId = $authStore.userId;
+        console.log("🚀 ~ userId:", userId)
         console.log(typeof userId)
         const token = $authStore.token;
   
         if (userId && token) {
-          const response = await axios.get(`http://localhost:3000/orders/${userId}`, {
+          const response = await axios.get(`${PUBLIC_API_URL_ORDERS}/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
+          console.log("🚀 ~ response:", response)
           orders = response.data;
         }
       } catch (error) {
@@ -45,12 +48,14 @@
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (token) {
-              const response = await axios.delete(`http://localhost:3000/orders/${orderId}`, {
+              console.log("🚀 ~ orderId:", orderId)
+              const response = await axios.delete(`${PUBLIC_API_URL_ORDERS}/${orderId}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
+                
               });
-        
+              console.log("🚀 ~ response:", response)
               await fetchOrders();
               Swal.fire(
                 'Deleted!',
@@ -71,7 +76,7 @@
       try {
         const token = $authStore.token;
         if (token) {
-          await axios.put(`http://localhost:3000/orders/${orderId}`, {
+          await axios.put(`${PUBLIC_API_URL_ORDERS}/${orderId}`, {
           
           }, {
             headers: {

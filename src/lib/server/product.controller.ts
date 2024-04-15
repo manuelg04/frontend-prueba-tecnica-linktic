@@ -101,8 +101,9 @@ export const deleteProduct = async (event: RequestEvent): Promise<Response> => {
       where: { id: Number(id) },
     });
 
-    return json(null, { status: 204 });
+    return new Response(null, { status: 204 });
   } catch (err: any) {
+    console.log("🚀 ~ err:", err)
     throw error(500, 'Error deleting product');
   }
 };
