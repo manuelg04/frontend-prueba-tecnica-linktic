@@ -43,6 +43,7 @@
 
 	async function handleUpdateProduct() {
 		if (selectedProduct) {
+			console.log('Updating product:', selectedProduct);
 			const updatedProduct = await updateProduct(
 				selectedProduct.id,
 				{ name, description, price },

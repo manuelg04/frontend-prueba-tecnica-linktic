@@ -8,11 +8,3 @@ export const GET = async () => {
 export const POST = async (event: RequestEvent) => {
   return await createProduct(event);
 };
-
-export const PUT = async (event: RequestEvent) => {
-  return await updateProduct(event);
-};
-
-export const DELETE = async (event: RequestEvent) => {
-  return await deleteProduct(event);
-};

@@ -55,6 +55,7 @@ export const getProductById = async (event: RequestEvent): Promise<Response> => 
 };
 
 export const updateProduct = async (event: RequestEvent): Promise<Response> => {
+    console.log('entrando en updateProduct')
   const { id } = event.params;
   const userId = event.locals.userId;
   const { name, description, price } = await event.request.json();
