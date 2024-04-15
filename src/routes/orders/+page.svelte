@@ -5,6 +5,7 @@
     import "../../app.css"
 	import Navbar from '../../components/Navbar.svelte';
     import OrderModal from '../../components/Order.svelte';
+	import Swal from 'sweetalert2';
     let orders: any[] = [];
   
     onMount(async () => {
@@ -23,7 +24,6 @@
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log("🚀 ~ response:", response)
           orders = response.data;
         }
       } catch (error) {
@@ -34,16 +34,33 @@
     async function deleteOrder(orderId: number) {
       try {
         const token = $authStore.token;
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            if (token) {
+              const response = await axios.delete(`http://localhost:3000/orders/${orderId}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+        
+              await fetchOrders();
+              Swal.fire(
+                'Deleted!',
+                'Your order has been deleted.',
+                'success'
+              )
+            }
+          }
+        })
   
-        if (token) {
-          await axios.delete(`http://localhost:3000/orders/${orderId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-  
-          await fetchOrders();
-        }
       } catch (error) {
         console.error('Error deleting order:', error);
       }

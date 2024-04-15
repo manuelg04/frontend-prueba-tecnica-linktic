@@ -22,7 +22,7 @@
             icon: 'success',
             confirmButtonText: 'Ok'
           });
-          goto('/dashboard')
+          goto('/')
         }
    
         console.log("🚀 ~ response:", response)

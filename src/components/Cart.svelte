@@ -3,41 +3,52 @@
 	import type { Product } from '$lib/interfaces/product.interface';
 	import axios from 'axios';
 	import '../app.css';
-  import { authStore } from '../stores/auth';
+	import { authStore } from '../stores/auth';
 	import Swal from 'sweetalert2';
 
-	export let cart: Product[];
-	let isOpen = true;
 
+	export let cart: Product[];
+  $: {
+    if (cart.length === 0) {
+      localStorage.removeItem('cart');
+    } else {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+	let isOpen = true;
 	function removeFromCart(index: number) {
 		cart.splice(index, 1);
 		cart = cart;
+    localStorage.setItem('cart', JSON.stringify(cart));
 	}
 
 	async function createOrder(token: string | null) {
 		try {
-      const userId = cart[0].userId;
-			const response = await axios.post('http://localhost:3000/orders', {
-				cartProducts: cart,
-        userId: userId
-			}, 
-      {
-        headers: {
-          Authorization: `Bearer ${$authStore.token}`
-        }
-      });
+			const userId = cart[0].userId;
+			const response = await axios.post(
+				'http://localhost:3000/orders',
+				{
+					cartProducts: cart,
+					userId: userId
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${$authStore.token}`
+					}
+				}
+			);
 
 			if (response.status === 201) {
 				const newOrder = response.data;
-        Swal.fire({
-          title: 'Orden creada',
-          text: `Orden creada con éxito con el ID: ${newOrder.id}`,
-          icon: 'success',
-          confirmButtonText: 'Ok'
-        });
+				Swal.fire({
+					title: 'Orden creada',
+					text: `Orden creada con éxito con el ID: ${newOrder.id}`,
+					icon: 'success',
+					confirmButtonText: 'Ok'
+				});
+				cart = [];
 				closeCart();
-	
-			} 
+			}
 		} catch (error) {
 			console.error('Error al crear la orden:', error);
 		}
@@ -47,7 +58,11 @@
 		isOpen = false;
 	}
 
-	$: total = cart.reduce((acc, product) => acc + product.price, 0);
+	$: total = cart.reduce((acc, product) => acc + Number(product.price), 0).toFixed(2);
+	$: formattedTotal = Number(total).toLocaleString(undefined, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2
+	});
 </script>
 
 {#if isOpen}
@@ -86,7 +101,7 @@
 				</ul>
 				<div class="flex justify-between items-center mb-4">
 					<span class="text-lg font-bold">Total a pagar:</span>
-					<span class="text-lg font-bold">${total}</span>
+					<span class="text-lg font-bold">${formattedTotal}</span>
 				</div>
 				<button
 					class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
