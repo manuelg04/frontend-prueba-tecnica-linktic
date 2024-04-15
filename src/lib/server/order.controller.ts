@@ -29,7 +29,6 @@ export const createOrder = async (event: RequestEvent): Promise<Response> => {
 };
 
 export const getOrders = async (): Promise<Response> => {
-    console.log('entrando en getOrders')
   try {
     const orders = await prisma.order.findMany({
       include: { products: true },
