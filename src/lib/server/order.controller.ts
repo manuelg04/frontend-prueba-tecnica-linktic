@@ -1,6 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { error, json } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient();
 
@@ -56,13 +57,13 @@ export const getOrdersByUserId = async (event: RequestEvent): Promise<Response> 
 };
 
 export const updateOrder = async (event: RequestEvent): Promise<Response> => {
-  const { orderId } = event.params;
+  const { id } = event.params;
   const userId = event.locals.userId;
-  const { productIds } = await event.request.json();
+  const { products: productIds, totalPrice } = await event.request.json();
 
   try {
     const order = await prisma.order.findUnique({
-      where: { id: Number(orderId) },
+      where: { id: Number(id) },
     });
 
     if (!order || order.userId !== userId) {
@@ -70,19 +71,16 @@ export const updateOrder = async (event: RequestEvent): Promise<Response> => {
     }
 
     const updatedOrder = await prisma.order.update({
-      where: { id: Number(orderId) },
-      data: {
-        products: { set: productIds.map((productId: number) => ({ id: productId })) },
-      },
-      include: { products: true },
-    });
+        where: { id: Number(id) },
+        data: {
+          products: {
+            set: productIds.map((productId: number) => ({ id: productId })),
+          },
+          totalPrice: new Decimal(totalPrice),
+        },
+        include: { products: true },
+      });
 
-    const totalPrice = updatedOrder.products.reduce((total: number, product: any) => total + Number(product.price), 0);
-
-    await prisma.order.update({
-      where: { id: Number(orderId) },
-      data: { totalPrice },
-    });
 
     return json(updatedOrder);
   } catch (err: any) {

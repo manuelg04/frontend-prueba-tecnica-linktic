@@ -4,6 +4,9 @@
 	import { fetchProducts } from '$lib/services/productService';
     import { authStore } from '../stores/auth';
 	import type { Product } from '$lib/interfaces/product.interface';
+	import Swal from 'sweetalert2';
+	import axios from 'axios';
+	import { PUBLIC_API_URL_ORDERS } from '$env/static/public';
 
 
 
@@ -21,12 +24,33 @@
   }
   
     function updateOrder() {
-      console.log('Actualizando orden:', order);
+      Swal.fire({
+        title: 'Orden actualizada',
+        text: `La orden con el ID: ${order.id} ha sido actualizada con éxito.`,
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });
       closeModal();
     }
-    function removeProduct(productId: number) {
+    async function removeProduct(productId: number) {
     order.products = order.products.filter((product: Product) => product.id !== productId);
     order.totalPrice = calculateTotal();
+
+    try {
+      const token = $authStore.token;
+      if (token) {
+        await axios.put(`${PUBLIC_API_URL_ORDERS}/${order.id}`, {
+          products: order.products.map((product: Product) => product.id),
+          totalPrice: order.totalPrice,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error updating order:', error);
+    }
   }
 
   function calculateTotal(): string {
