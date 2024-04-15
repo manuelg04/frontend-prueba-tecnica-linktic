@@ -21,6 +21,7 @@
         const token = $authStore.token;
   
         if (userId && token) {
+          console.log(`${PUBLIC_API_URL_ORDERS}/${userId}`)
           const response = await axios.get(`${PUBLIC_API_URL_ORDERS}/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -115,6 +116,9 @@
     </div>
   
     <div class="overflow-x-auto">
+      {#if orders.length === 0}
+      <p class="text-center text-gray-500 py-8">No orders found. You haven't placed any orders yet.</p>
+    {:else}
       <table class="w-full table-auto bg-white rounded-lg shadow-lg">
         <thead>
           <tr class="bg-blue-500 text-white">
@@ -148,5 +152,6 @@
           {/each}
         </tbody>
       </table>
+    {/if}
     </div>
   </main>

@@ -29,12 +29,11 @@
 		}
 		products = await fetchProducts($authStore.token);
 		const storedCart = localStorage.getItem('cart');
-		console.log('🚀 ~ storedCart:', storedCart);
 		if (storedCart) {
 			cart = JSON.parse(storedCart);
 		}
 	});
-
+	console.log($authStore.userId);
 	async function handleCreateProduct() {
 		const newProduct = await createProduct({ name, description, price }, $authStore.token);
 		products = [...products, newProduct];
@@ -57,11 +56,13 @@
 	}
 
 	async function handleDeleteProduct(productId: number) {
-		if ($authStore.token) {
-			await deleteProduct(productId, $authStore.token);
-			products = products.filter((p) => p?.id !== productId);
-		}
-	}
+  if ($authStore.token) {
+    const deleted = await deleteProduct(productId, $authStore.token);
+    if (deleted) {
+      products = products.filter((p) => p?.id !== productId);
+    }
+  }
+}
 
 	function addToCart(product: Product) {
 		cart = [...cart, product];

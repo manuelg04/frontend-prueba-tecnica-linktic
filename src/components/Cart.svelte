@@ -27,7 +27,7 @@
 
 	async function createOrder(token: string | null) {
 		try {
-			const userId = cart[0].userId;
+			const userId = $authStore.userId;
 			const response = await axios.post(
 				`${PUBLIC_API_URL_ORDERS}`,
 				{

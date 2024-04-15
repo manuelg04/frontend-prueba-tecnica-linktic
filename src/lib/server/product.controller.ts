@@ -104,6 +104,6 @@ export const deleteProduct = async (event: RequestEvent): Promise<Response> => {
     return new Response(null, { status: 204 });
   } catch (err: any) {
     console.log("🚀 ~ err:", err)
-    throw error(500, 'Error deleting product');
+    throw error(err.status || 500, err.message || 'Error deleting product');
   }
 };

@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 export const createOrder = async (event: RequestEvent): Promise<Response> => {
   const { cartProducts, userId } = await event.request.json();
+  console.log("🚀 ~ userId:", userId)
 
   try {
     const productIds = cartProducts.map((product: any) => product.id);
@@ -40,12 +41,10 @@ export const getOrders = async (): Promise<Response> => {
 };
 
 export const getOrdersByUserId = async (event: RequestEvent): Promise<Response> => {
-  const { userId } = event.params;
-  console.log("🚀 ~ userId:", userId)
-
+  const { id } = event.params;
   try {
     const orders = await prisma.order.findMany({
-      where: { userId: Number(userId) },
+      where: { userId: Number(id) },
       include: { products: true },
     });
     return json(orders);

@@ -113,20 +113,17 @@ export async function updateProduct(productId: number, product: Partial<Product>
   }
 }
 
-export async function deleteProduct(productId: number, token: string | null): Promise<void> {
+export async function deleteProduct(productId: number, token: string | null): Promise<boolean> {
   const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-  
   try {
     const response = await axios.delete(`${API_URL}/${productId}`, config);
-    
     if (response.status === 204) {
       Swal.fire('Success', 'Product deleted successfully', 'success');
+      return true;
     }
-  } catch (error:any) {
+  } catch (error: any) {
     if (error.response) {
-
       const { status } = error.response;
-      
       switch (status) {
         case 404:
           Swal.fire('Error', 'Product not found', 'error');
@@ -143,5 +140,6 @@ export async function deleteProduct(productId: number, token: string | null): Pr
     } else {
       Swal.fire('Error', 'Failed to connect to the server', 'error');
     }
+    return false;
   }
 }
