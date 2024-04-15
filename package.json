@@ -8,7 +8,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"postinstall": "npx prisma migrate deploy && npx prisma generate"
+		"postinstall": "npx prisma migrate && npx prisma generate"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
