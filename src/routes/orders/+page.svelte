@@ -46,7 +46,6 @@
         }).then(async (result) => {
           if (result.isConfirmed) {
             if (token) {
-              console.log("🚀 ~ orderId:", orderId)
               const response = await axios.delete(`${PUBLIC_API_URL_ORDERS}/${orderId}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
