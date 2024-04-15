@@ -11,12 +11,12 @@
 			const userId = $authStore.userId;
 			console.log("🚀 ~ userId:", userId)
 			await axios.post(`${PUBLIC_API_URL_USERS}/logout`, { userId });
-
 			authStore.set({
 				token: null,
 				isAuthenticated: false,
 				userId: null
 			});
+			localStorage.removeItem('cart');
 
 			goto('/');
 		} catch (error) {

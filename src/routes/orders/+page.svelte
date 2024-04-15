@@ -109,31 +109,44 @@
   <main class="container mx-auto px-4 py-8">
     <Navbar />
     <OrderModal isOpen={isModalOpen} order={selectedOrder} on:close={closeModal} />
-    <h1 class="text-2xl font-bold mb-4">My Orders</h1>
+    
+    <div class="my-8">
+      <h1 class="text-4xl font-bold text-center text-blue-600 mb-4">My Orders</h1>
+    </div>
   
-    <table class="w-full table-auto">
-      <thead>
-        <tr class="bg-gray-200">
-          <th class="px-4 py-2">Order ID</th>
-          <th class="px-4 py-2">Order Date</th>
-          <th class="px-4 py-2">Total</th>
-          <th class="px-4 py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each orders as order}
-          <tr class="bg-white hover:bg-gray-100">
-            <td class="border px-4 py-2 text-center">{order.id}</td>
-            <td class="border px-4 py-2 text-center">{new Date(order.createdAt).toLocaleDateString()}</td>
-            <td class="border px-4 py-2 text-center">{order.totalPrice}</td>
-            <td class="border px-4 py-2 text-center">
-              <button class="bg-red-500 text-white px-2 py-1 rounded mr-2" on:click={() => deleteOrder(order.id)}>Delete</button>
-              <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" on:click={() => openModal(order)}>
-                Update
-              </button>
-            </td>
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto bg-white rounded-lg shadow-lg">
+        <thead>
+          <tr class="bg-blue-500 text-white">
+            <th class="px-6 py-4 text-left">Order ID</th>
+            <th class="px-6 py-4 text-left">Order Date</th>
+            <th class="px-6 py-4 text-left">Total</th>
+            <th class="px-6 py-4 text-center">Actions</th>
           </tr>
-        {/each}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#each orders as order}
+            <tr class="border-b border-gray-200 hover:bg-gray-100">
+              <td class="px-6 py-4">{order.id}</td>
+              <td class="px-6 py-4">{new Date(order.createdAt).toLocaleDateString()}</td>
+              <td class="px-6 py-4">{order.totalPrice}</td>
+              <td class="px-6 py-4 text-center">
+                <button
+                  class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md mr-2"
+                  on:click={() => deleteOrder(order.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md"
+                  on:click={() => openModal(order)}
+                >
+                  Update
+                </button>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
   </main>
