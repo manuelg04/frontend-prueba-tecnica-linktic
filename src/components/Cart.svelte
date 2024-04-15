@@ -6,8 +6,7 @@
 	import { authStore } from '../stores/auth';
 	import Swal from 'sweetalert2';
   import { createEventDispatcher } from 'svelte';
-	import { PUBLIC_API_URL_ORDERS } from '$env/static/public';
-
+	
 	export let cart: Product[];
   $: {
     if (cart.length === 0) {

@@ -6,7 +6,6 @@
 	import type { Product } from '$lib/interfaces/product.interface';
 	import Swal from 'sweetalert2';
 	import axios from 'axios';
-	import { PUBLIC_API_URL_ORDERS } from '$env/static/public';
 
 
 

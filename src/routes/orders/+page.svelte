@@ -6,7 +6,6 @@
 	import Navbar from '../../components/Navbar.svelte';
     import OrderModal from '../../components/Order.svelte';
 	import Swal from 'sweetalert2';
-	import { PUBLIC_API_URL_ORDERS } from '$env/static/public';
     let orders: any[] = [];
   
     onMount(async () => {
@@ -67,25 +66,6 @@
       }
     }
   
-    async function updateOrder(orderId: number) {
-      console.log("🚀 ~ orderId:", orderId)
-      try {
-        const token = $authStore.token;
-        if (token) {
-          await axios.put(`${PUBLIC_API_URL_ORDERS}/${orderId}`, {
-          
-          }, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-  
-          await fetchOrders();
-        }
-      } catch (error) {
-        console.log('Error updating order:', error);
-      }
-    }
 
     let isModalOpen = false;
   let selectedOrder: any = null;
