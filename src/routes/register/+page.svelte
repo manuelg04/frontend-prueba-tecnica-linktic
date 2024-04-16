@@ -27,19 +27,18 @@
    
         console.log("🚀 ~ response:", response)
        
-      } catch (error) {
+      } catch (error: any) {
         console.error("🚀 ~ error:", error)
-        if(error.response.status === 409){
-          Swal.fire({
-            title: 'Error',
-            text: 'User already exists. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-          });
-        }
-        else{
-          error = 'Invalid credentials. Please try again.'
-        }
+        if (error.response && error.response.status === 409) {
+      Swal.fire({
+        title: 'Error',
+        text: 'User already exists. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+    } else {
+      const errorMessage: string = 'Invalid credentials. Please try again.';
+    }
       }
     };
   </script>

@@ -10,6 +10,7 @@
 			const userId = $authStore.userId;
 			await axios.post('api/users/logout', { userId });
 			authStore.set({
+				email: null,
 				token: null,
 				isAuthenticated: false,
 				userId: null

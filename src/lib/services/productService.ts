@@ -142,4 +142,5 @@ export async function deleteProduct(productId: number, token: string | null): Pr
     }
     return false;
   }
+  return false;
 }

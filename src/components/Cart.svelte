@@ -24,7 +24,7 @@
     dispatch('removeProduct');
 	}
 
-	async function createOrder(token: string | null) {
+	async function createOrder() {
 		try {
 			const userId = $authStore.userId;
 			const response = await axios.post(
